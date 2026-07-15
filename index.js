@@ -35,7 +35,7 @@ const schema = new mongoose.Schema({
     gender: {
         type: String
     }
-})
+}, {timestamps: true});
 
 
 //model
@@ -100,7 +100,7 @@ app
 })
 
 
-app.post("/api/users", (req, res) => {
+app.post("/api/users", async (req, res) => {
     const body = req.body;  
     if( !body || !body.first_name || !body.last_name || !body.email || !body.job_titlw ){
         return res.status(400).json({ status: 'All fields are required'});
