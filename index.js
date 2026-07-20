@@ -1,7 +1,6 @@
 const express = require("express");
 const app = express();
 const PORT = 8000;
-
 const userRouter = require('./routes/user')
 const {connectMdB} = require('./connection');
 const {logReqRes} = require('./middleware/index')
