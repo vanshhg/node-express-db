@@ -106,6 +106,7 @@ app.post("/api/users", async (req, res) => {
         return res.status(400).json({ status: 'All fields are required'});
     }
     
+    //storing the user in the mongodb database
     const result = await User1.create({
         firstName: body.first_name,
         lastName: body.last_name,
