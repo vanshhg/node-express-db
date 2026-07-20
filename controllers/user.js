@@ -66,6 +66,15 @@ async function handleCreateUser(req, res){
     return res.status(201).json({msg: 'success'}); 
 }
 
+// async function handlehtml(req, res){
+//     const html = `
+//     <ul>
+//         ${users.map((user) => `<li>${user.first_name}</li>`).join("")}
+//     </ul>
+//     `;
+//     res.send(html);
+// }
+
 module.exports = {
     handleGetAllusers, 
     handleDeleteId, 
