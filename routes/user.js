@@ -1,7 +1,7 @@
 const express = require("express");
 
-const router = express.Router;
-const {handleGetAllusers, handleDeleteId, handleGetId, handlePatchId, handleCreateUser}= require('../controllers/user')
+const router = express.Router();
+const {handleGetAllusers, handleDeleteId, handleGetId, handlePatchId, handleCreateUser, handlehtml}= require('../controllers/user')
 
 router
     .route("/")

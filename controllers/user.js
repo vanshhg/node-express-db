@@ -1,84 +1,65 @@
 const User = require('../models/user');
 
 async function handleGetAllusers(req, res){
-    const allDbusers = await user.find({});
+    const allDbusers = await User.find({});
     return res.json(allDbusers);
 }
 
 async function handleGetId(req, res){
-    const id = Number(req.params.id);
-    const user = users.find((user) => user.id === id);
-    if(!user){
-        return res.status(404).json({ error: 'user not found'});
-    }
+    const user = await User.findById(req.params.id);
+    if(!user) return res.status(404).json({error: "user not found"});
     return res.json(user);
 }
 
 async function handlePatchId(req, res){
-    const id = Number(req.params.id);
-    const index = users.findIndex((user) => user.id === id);
-
-    if (index === -1) {
-        return res.status(404).json({ error: "User not found" });
-    }
-    const body = req.body;
-    users[index] = { ...users[index], ...body};
-    fs.writeFile('./MOCK_DATA.json', JSON.stringify(users),(err, data) => {
-        if (err) {
-            return res.status(500).json({ error: "Failed to save" });
-        }
-        return res.json(users[index]);
-    });
+    await User.findByIdAndUpdate(req.params.id, {lastName: "changed"});
+    return res.json({status: "success"});
 }
 
 async function handleDeleteId(req, res){
-    const id = Number(req.params.id);
-    const index = users.findIndex((user) => user.id === id);
-
-    if (index === -1) {
-        return res.status(404).json({ error: "User not found" });
+    const deletedUser = await User.findByIdAndDelete(req.params.id);
+    if (!deletedUser) {
+        return res.status(404).json({
+            error: "User not found",
+        });
     }
-
-    users.splice(index, 1);
-    fs.writeFile('./MOCK_DATA.json', JSON.stringify(users),(err, data) => {
-        if (err) {
-            return res.status(500).json({ error: "Failed to delete" });
-        }
-
-        return res.json({status: 'success'});
-    });
+    return res.json({status: "success"});
 }
 
 async function handleCreateUser(req, res){
     const body = req.body;  
-    if( !body || !body.first_name || !body.last_name || !body.email || !body.job_titlw ){
+    if( !body || !body.first_name || !body.last_name || !body.email || !body.job_title ){
         return res.status(400).json({ status: 'All fields are required'});
     }
     
     //storing the user in the mongodb database
-    const result = await User1.create({
+    const result = await User.create({
         firstName: body.first_name,
         lastName: body.last_name,
         email: body.email,
-        jobTitle: body.job_titlw,
+        jobTitle: body.job_title,
     });
     console.log(result);
     return res.status(201).json({msg: 'success'}); 
 }
 
-// async function handlehtml(req, res){
-//     const html = `
-//     <ul>
-//         ${users.map((user) => `<li>${user.first_name}</li>`).join("")}
-//     </ul>
-//     `;
-//     res.send(html);
-// }
+async function handlehtml(req, res){
+    const users = await User.find({});
+
+    const html = `
+    <ul>
+        ${users.map((user) => `<li>${user.firstName}</li>`).join("")}
+    </ul>
+    `;
+
+    return res.send(html);
+}
 
 module.exports = {
     handleGetAllusers, 
     handleDeleteId, 
     handleGetId, 
     handlePatchId,
-    handleCreateUser
+    handleCreateUser,
+    handlehtml
 };
